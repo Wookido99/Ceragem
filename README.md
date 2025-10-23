@@ -1,8 +1,3 @@
-# Ceragem Sleep Stage Toolkit
-
-이 저장소는 웨어러블 및 PSG 데이터를 사용한 수면 단계 분류 실험을 위한 코드 베이스입니다.  
-It consolidates the end-to-end training pipeline and dataset adapters used for DREAMT (CSV) as well as the PhysioNet CAPSLPDB/SleepBRL (EDF) corpora.
-
 ## Highlights
 - Unified training entry point (`main.py`) with configurable datasets, features, and models.
 - Dataset loaders for DREAMT CSV exports, CAPSLPDB EDF files, and SleepBRL EDF files (`datasets/`).
