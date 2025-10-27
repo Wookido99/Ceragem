@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import re
 from pathlib import Path
-from typing import Iterable, List, Optional, Sequence, Tuple
+from typing import Iterable, List, Mapping, Optional, Sequence, Tuple
 
 import numpy as np
 import pandas as pd
@@ -53,26 +53,41 @@ def load_csv_with_sleep_labels(
     feature_columns: Sequence[str],
     label_column: str,
     samples_per_epoch: int,
-) -> Tuple[np.ndarray, np.ndarray]:
-    """Load a DREAMT CSV file and return epoch arrays and labels."""
+    label_map: Optional[Mapping[str, int]] = None,
+) -> Tuple[np.ndarray, np.ndarray, List[str], List[str]]:
+    """Load a DREAMT CSV file and return epoch arrays, numeric labels, kept stages, and all stages."""
     try:
         df = pd.read_csv(file_path)
     except ParserError:
         df = pd.read_csv(file_path, engine="python", on_bad_lines="skip")
 
-    df = df.replace({label_column: {"P": "W"}})
+    label_lookup = label_map or LABEL_MAP
     df = df[df[label_column] != "Missing"]
-    df[label_column] = df[label_column].map(LABEL_MAP)
+    df["stage_original"] = df[label_column].astype(str)
+    df[label_column] = df[label_column].map(label_lookup)
     df = df.dropna(subset=[label_column] + list(feature_columns))
     df = df.reset_index(drop=True)
     df["epoch_id"] = (df.index // samples_per_epoch).astype(int)
 
     epochs: List[np.ndarray] = []
     labels: List[int] = []
+    stage_names_kept: List[str] = []
+    stage_names_all: List[str] = []
     for _, group in df.groupby("epoch_id"):
         if len(group) != samples_per_epoch:
             continue
+        stage_name = str(group["stage_original"].iloc[0])
+        stage_names_all.append(stage_name)
+        label_value = group[label_column].iloc[0]
+        if pd.isna(label_value):
+            continue
         epochs.append(group[feature_columns].to_numpy(dtype=np.float32, copy=True).T)
-        labels.append(int(group[label_column].iloc[0]))
+        labels.append(int(label_value))
+        stage_names_kept.append(stage_name)
 
-    return np.stack(epochs) if epochs else np.empty((0, len(feature_columns), samples_per_epoch), dtype=np.float32), np.asarray(labels, dtype=np.int64)
+    if epochs:
+        epoch_array = np.stack(epochs)
+    else:
+        epoch_array = np.empty((0, len(feature_columns), samples_per_epoch), dtype=np.float32)
+
+    return epoch_array, np.asarray(labels, dtype=np.int64), stage_names_kept, stage_names_all

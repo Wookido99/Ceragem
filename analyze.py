@@ -1,108 +1,126 @@
 import argparse
 import glob
-import io
 import os
 import random
-import sys
 import time
 import warnings
 
+from typing import List
+
 import numpy as np
+import pandas as pd
 import torch
 import torch.nn as nn
 import torch.optim as optim
-from sklearn.metrics import (
-    balanced_accuracy_score,
-    classification_report,
-    cohen_kappa_score,
-    confusion_matrix,
-    f1_score,
-    matthews_corrcoef,
-    precision_recall_fscore_support,
-)
 from tqdm import tqdm
-from pathlib import Path
-from datetime import datetime
 
 from datasets.base import LABEL_MAP
-from preprocess import DEFAULT_FEATURES, get_dataloader
+from preprocess import get_dataloader
 from model import build_model
 
-from typing import Mapping, Sequence
 
+EXCLUDED_COLUMNS = {
+    "Sleep_Stage",
+    "Obstructive_Apnea",
+    "Central_Apnea",
+    "Hypopnea",
+    "Multiple_Events",
+    "artifact",
+    "sid",
+    "TIMESTAMP",
+    "timestamp",
+    "Timestamp",
+    "timestamp_start",
+    "Timestamp_Start",
+}
 
 DEFAULT_INV_LABEL_MAP = {value: key for key, value in LABEL_MAP.items()}
 
 
-class Tee(io.TextIOBase):
-    def __init__(self, *streams: io.TextIOBase):
-        self.streams = streams
+def infer_dreamt_features(sample_csv: str) -> List[str]:
+    """Infer all numeric DREAMT feature columns except labels/metadata."""
+    try:
+        df = pd.read_csv(sample_csv, nrows=1000)
+    except pd.errors.EmptyDataError as err:
+        raise ValueError(f"Failed to read sample file {sample_csv}: {err}") from err
 
-    def write(self, data):
-        for stream in self.streams:
-            stream.write(data)
-        for stream in self.streams:
-            stream.flush()
-        return len(data)
-
-    def flush(self):
-        for stream in self.streams:
-            stream.flush()
-
-    def isatty(self):
-        return any(getattr(stream, "isatty", lambda: False)() for stream in self.streams)
+    candidates = df.select_dtypes(include=["number"]).columns
+    features = [col for col in candidates if col not in EXCLUDED_COLUMNS]
+    if not features:
+        raise ValueError(
+            "No numeric feature columns found after excluding label/metadata columns. "
+            "Check the input CSV structure."
+        )
+    return features
 
 
-def report_classification_metrics(
-    y_true: np.ndarray,
-    y_pred: np.ndarray,
-    split_name: str,
-    ordered_labels: Sequence[int],
-    inv_label_map: Mapping[int, str],
-) -> None:
-    """Print multi-class metrics for the given predictions."""
-    if y_true is None or y_pred is None or y_true.size == 0:
-        print(f"\n{split_name}: no samples available for metric reporting.")
+def summarize_training_split(train_dataset, feature_names: List[str]) -> None:
+    """Print label distribution and per-feature stats for the training split."""
+    labels = train_dataset.labels
+    if labels.size == 0:
+        print("Training dataset is empty; skipping summary.")
         return
 
-    accuracy = (y_true == y_pred).mean()
-    macro_f1 = f1_score(y_true, y_pred, average="macro", zero_division=0)
-    weighted_f1 = f1_score(y_true, y_pred, average="weighted", zero_division=0)
-    bal_accuracy = balanced_accuracy_score(y_true, y_pred)
-    kappa = cohen_kappa_score(y_true, y_pred)
-    mcc = matthews_corrcoef(y_true, y_pred)
+    inv_label_map = getattr(train_dataset, "inv_label_map", DEFAULT_INV_LABEL_MAP)
+    total = labels.size
+    print("\nTraining dataset summary (60% split):")
+    print(f"Number of features: {len(feature_names)}")
+    raw_stage_counts = getattr(train_dataset, "stage_name_counts", None)
+    if raw_stage_counts:
+        total_raw = sum(raw_stage_counts.values())
+        print("Raw stage distribution (count | percentage | stage):")
+        preferred_order = ["W", "P", "N1", "N2", "N3", "R"]
+        stages_to_print = []
+        for stage in preferred_order:
+            if stage in raw_stage_counts:
+                stages_to_print.append(stage)
+        for stage in sorted(raw_stage_counts.keys()):
+            if stage not in stages_to_print:
+                stages_to_print.append(stage)
+        for stage in stages_to_print:
+            count = raw_stage_counts[stage]
+            pct = (count / total_raw) * 100 if total_raw else 0.0
+            print(f"  {count:6d} | {pct:6.2f}% | {stage}")
+    excluded_stage_counts = getattr(train_dataset, "excluded_stage_counts", None)
+    if excluded_stage_counts:
+        total_excluded = sum(excluded_stage_counts.values())
+        if total_excluded > 0:
+            print("Excluded stage distribution (not used for training/eval):")
+            preferred_order = ["P", "W", "N1", "N2", "N3", "R"]
+            stages_to_print = []
+            for stage in preferred_order:
+                if stage in excluded_stage_counts:
+                    stages_to_print.append(stage)
+            for stage in sorted(excluded_stage_counts.keys()):
+                if stage not in stages_to_print:
+                    stages_to_print.append(stage)
+            for stage in stages_to_print:
+                count = excluded_stage_counts[stage]
+                pct = (count / total_excluded) * 100 if total_excluded else 0.0
+                print(f"  {count:6d} | {pct:6.2f}% | {stage}")
+    print("Label distribution (count | percentage | stage):")
+    uniques, counts = np.unique(labels, return_counts=True)
+    for label_id, count in zip(uniques, counts):
+        pct = (count / total) * 100
+        stage = inv_label_map.get(int(label_id), str(label_id))
+        print(f"  {count:6d} | {pct:6.2f}% | {stage} ({label_id})")
 
-    print(f"\n{split_name} metrics:")
-    print(f"  Accuracy           : {accuracy:.4f}")
-    print(f"  Balanced Accuracy  : {bal_accuracy:.4f}")
-    print(f"  Macro F1           : {macro_f1:.4f}")
-    print(f"  Weighted F1        : {weighted_f1:.4f}")
-    print(f"  Cohen's Kappa      : {kappa:.4f}")
-    print(f"  Matthews Corrcoef  : {mcc:.4f}")
+    sequences = train_dataset.sequences
+    axis = (0, 1, 3)
+    means = sequences.mean(axis=axis)
+    stds = sequences.std(axis=axis)
+    mins = sequences.min(axis=axis)
+    maxs = sequences.max(axis=axis)
 
-    precision, recall, f1, support = precision_recall_fscore_support(
-        y_true, y_pred, labels=ordered_labels, zero_division=0
-    )
-    print("\n  Per-class metrics (precision | recall | f1 | support):")
-    for label, p, r, f, s in zip(ordered_labels, precision, recall, f1, support):
-        label_name = inv_label_map.get(label, str(label))
-        print(f"    {label_name:>3} ({label}): {p:.4f} | {r:.4f} | {f:.4f} | {int(s)}")
-
-    cm = confusion_matrix(y_true, y_pred, labels=ordered_labels)
-    print("\n  Confusion matrix (rows=true, cols=pred):")
-    print(cm)
-
-    target_names = [inv_label_map.get(idx, str(idx)) for idx in ordered_labels]
-    print("\n  Classification report:")
-    print(
-        classification_report(
-            y_true,
-            y_pred,
-            labels=ordered_labels,
-            target_names=target_names,
-            zero_division=0,
+    print("\nFeature distribution (mean | std | min | max):")
+    for idx, name in enumerate(feature_names):
+        print(
+            f"  {name}: "
+            f"{means[idx]: .4f} | "
+            f"{stds[idx]: .4f} | "
+            f"{mins[idx]: .4f} | "
+            f"{maxs[idx]: .4f}"
         )
-    )
 
 
 def fix_seed(seed):
@@ -145,12 +163,10 @@ def train(model, dataloader, criterion, optimizer, device):
     return epoch_loss, epoch_acc
 
 
-def evaluate(model, dataloader, criterion, device, collect_stats: bool = False):
+def evaluate(model, dataloader, criterion, device):
     running_loss = 0.0
     correct = 0
     total = 0
-    collected_true = [] if collect_stats else None
-    collected_pred = [] if collect_stats else None
 
     model.eval()
     with torch.no_grad():
@@ -172,59 +188,42 @@ def evaluate(model, dataloader, criterion, device, collect_stats: bool = False):
             _, predicted = torch.max(outputs.data, 1)
             total += labels.size(0)
             correct += (predicted == labels).sum().item()
-            if collect_stats:
-                collected_true.extend(labels.detach().cpu().numpy())
-                collected_pred.extend(predicted.detach().cpu().numpy())
     epoch_loss = running_loss / len(dataloader.dataset)
     epoch_acc = correct / total
 
-    if collect_stats:
-        return (
-            epoch_loss,
-            epoch_acc,
-            np.asarray(collected_true, dtype=np.int64),
-            np.asarray(collected_pred, dtype=np.int64),
-        )
-    return epoch_loss, epoch_acc, None, None
+    return epoch_loss, epoch_acc
 
 
-def run_pipeline(args):
-    if not torch.cuda.is_available():
-        raise RuntimeError("CUDA GPU is required but not available.")
-    if args.gpu < 0 or args.gpu >= torch.cuda.device_count():
-        raise ValueError(
-            f"Invalid GPU index {args.gpu}. Available GPUs: 0 to {torch.cuda.device_count() - 1}."
-        )
-    torch.cuda.set_device(args.gpu)
-    device = torch.device(f"cuda:{args.gpu}")
-    print(f"Using CUDA device {args.gpu}: {torch.cuda.get_device_name(args.gpu)}")
+def main(args):
+    device = torch.device(f"cuda:{args.device}" if torch.cuda.is_available() else "cpu")
     fix_seed(args.seed)
 
+    if args.test_ratio != 0.1:
+        warnings.warn("--test_ratio is deprecated and ignored; using 60/20/20 split.")
+
     dataset_name = args.data.lower()
-    if dataset_name == "capslpdb":
-        default_dir = "/data/ceragem/physionet.org/files/capslpdb/1.0.0"
-        data_dir = args.data_dir or default_dir
-        pattern = os.path.join(data_dir, "*.edf")
-        data_format = "capslpdb"
-        default_features = list(DEFAULT_FEATURES["capslpdb"])
-    elif dataset_name == "sleepbrl":
-        default_dir = "/data/ceragem/physionet.org/files/sleepbrl/1.0.0"
-        data_dir = args.data_dir or default_dir
-        pattern = os.path.join(data_dir, "*.edf")
-        data_format = "sleepbrl"
-        default_features = list(DEFAULT_FEATURES["sleepbrl"])
-    else:
-        default_dir = os.path.join(
-            "/data/ceragem/physionet.org/files", args.data, "2.1.0", "data_100Hz"
-        )
-        data_dir = args.data_dir or default_dir
-        pattern = os.path.join(data_dir, "*.csv")
-        data_format = "dreamt"
-        default_features = list(DEFAULT_FEATURES["dreamt"])
+    if dataset_name != "dreamt":
+        raise ValueError("This script now supports only the DREAMT dataset.")
+
+    default_dir = os.path.join(
+        "/data/ceragem/physionet.org/files", "dreamt", "2.1.0", "data_100Hz"
+    )
+    data_dir = args.data_dir or default_dir
+    pattern = os.path.join(data_dir, "*.csv")
+    data_format = "dreamt"
 
     all_files = sorted(glob.glob(pattern))
     if not all_files:
         raise FileNotFoundError(f"No data files found under {data_dir} (pattern: {pattern}).")
+
+    requested_features = [c.strip() for c in args.features.split(",") if c.strip()]
+    if requested_features:
+        feature_columns = requested_features
+        print(f"Using user-provided feature columns ({len(feature_columns)} total).")
+    else:
+        inferred_features = infer_dreamt_features(all_files[0])
+        feature_columns = inferred_features
+        print(f"Inferred {len(feature_columns)} DREAMT feature columns from {all_files[0]}.")
 
     files = all_files[:]
     rnd = random.Random(args.seed)
@@ -258,22 +257,7 @@ def run_pipeline(args):
     )
 
     effective_sample_rate = args.sample_rate
-    if dataset_name == "sleepbrl" and args.sample_rate == 100:
-        effective_sample_rate = 50
-        print("Adjusting sample rate to 50 Hz for SleepBRL.")
-
-    requested_features = [c.strip() for c in args.features.split(",") if c.strip()]
-    if requested_features:
-        feature_columns = requested_features
-    elif default_features:
-        feature_columns = default_features
-    else:
-        feature_columns = None
-
-    if feature_columns:
-        print(f"Using feature columns: {feature_columns}")
-    else:
-        print("Using dataset default feature columns.")
+    print(f"Using feature columns: {feature_columns}")
 
     train_loader = get_dataloader(train_files,
                                   args.batch_size,
@@ -281,7 +265,9 @@ def run_pipeline(args):
                                   shuffle=True,
                                   epoch_seconds=args.epoch_seconds,
                                   sample_rate_hz=effective_sample_rate,
+                                #   max_files=args.max_files,
                                   max_files=None,
+                                  
                                   feature_columns=feature_columns,
                                   data_format=data_format)
     val_loader = get_dataloader(val_files,
@@ -304,15 +290,18 @@ def run_pipeline(args):
                                  data_format=data_format)
 
     train_dataset = train_loader.dataset
+    summarize_training_split(train_dataset, feature_columns)
+
     inv_label_map = getattr(train_dataset, "inv_label_map", DEFAULT_INV_LABEL_MAP)
-    ordered_labels = getattr(train_dataset, "ordered_label_ids", None)
-    if not ordered_labels:
-        ordered_labels = sorted(inv_label_map.keys())
-    num_channels = getattr(train_dataset, "num_channels", train_dataset.sequences.shape[2])
-    samples_per_epoch = getattr(train_dataset, "samples_per_epoch", effective_sample_rate * args.epoch_seconds)
+    ordered_label_ids = getattr(train_dataset, "ordered_label_ids", None)
+    if not ordered_label_ids:
+        ordered_label_ids = sorted(inv_label_map.keys())
     num_classes = getattr(train_dataset, "num_classes", None)
     if not num_classes:
-        num_classes = max(ordered_labels) + 1 if ordered_labels else len(inv_label_map)
+        num_classes = max(ordered_label_ids) + 1 if ordered_label_ids else 1
+
+    num_channels = getattr(train_dataset, "num_channels", train_dataset.sequences.shape[2])
+    samples_per_epoch = getattr(train_dataset, "samples_per_epoch", effective_sample_rate * args.epoch_seconds)
     input_dim = getattr(train_dataset, "feature_dim", num_channels * samples_per_epoch)
 
     print(f"Using {num_channels} channels with {samples_per_epoch} samples per epoch.")
@@ -360,10 +349,7 @@ def run_pipeline(args):
     optimizer = optim.Adam(model.parameters(), lr=args.lr)
     criterion = nn.CrossEntropyLoss()
 
-    losses, accs, val_macro_f1s = [], [], []
-    best_state_dict = None
-    best_epoch = -1
-    best_val_macro_f1 = float("-inf")
+    losses, accs = [], []
     start_time = time.perf_counter()
     for epoch in tqdm(range(args.epochs), desc='ceragem'):
         train_loss, train_acc = train(model=model, 
@@ -371,100 +357,28 @@ def run_pipeline(args):
                                       criterion=criterion, 
                                       optimizer=optimizer, 
                                       device=device)
-        val_loss, val_acc, val_true, val_pred = evaluate(model=model, 
-                                                         dataloader=val_loader, 
-                                                         criterion=criterion, 
-                                                         device=device,
-                                                         collect_stats=True)
-        if val_true is not None and val_true.size > 0:
-            val_macro_f1 = f1_score(val_true, val_pred, average="macro", zero_division=0)
-        else:
-            val_macro_f1 = float("nan")
-        comparable_macro_f1 = val_macro_f1 if np.isfinite(val_macro_f1) else float("-inf")
-        val_macro_f1s.append(val_macro_f1)
-        if comparable_macro_f1 > best_val_macro_f1:
-            best_val_macro_f1 = comparable_macro_f1
-            best_epoch = epoch
-            best_state_dict = {k: v.detach().cpu().clone() for k, v in model.state_dict().items()}
+        val_loss, val_acc = evaluate(model=model, 
+                                     dataloader=val_loader, 
+                                     criterion=criterion, 
+                                     device=device)
         losses.append([train_loss, val_loss]); accs.append([train_acc, val_acc])
         # Pretty per-epoch logging for clarity
-        val_f1_str = f"{val_macro_f1:.4f}" if np.isfinite(val_macro_f1) else "N/A"
         print(f"Epoch {epoch+1:>3}/{args.epochs}: "
               f"train_loss={train_loss:.4f} | val_loss={val_loss:.4f} | "
-              f"train_acc={train_acc:.4f} | val_acc={val_acc:.4f} | "
-              f"val_macro_f1={val_f1_str}")
+              f"train_acc={train_acc:.4f} | val_acc={val_acc:.4f}")
 
     # Summary table
     print("\nSummary (loss: train/val, acc: train/val):")
-    for i, ((tr_l, v_l), (tr_a, v_a), v_f1) in enumerate(zip(losses, accs, val_macro_f1s), start=1):
-        v_f1_str = f"{v_f1:.4f}" if np.isfinite(v_f1) else "N/A"
-        print(f"  - Epoch {i:>3}: loss {tr_l:.4f}/{v_l:.4f} | acc {tr_a:.4f}/{v_a:.4f} | val_macro_f1 {v_f1_str}")
+    for i, ((tr_l, val_l), (tr_a, val_a)) in enumerate(zip(losses, accs), start=1):
+        print(f"  - Epoch {i:>3}: loss {tr_l:.4f}/{val_l:.4f} | acc {tr_a:.4f}/{val_a:.4f}")
     elapsed = time.perf_counter() - start_time
     print(f"\nElapsed training time: {elapsed:.2f} seconds")
 
-    if best_state_dict is not None:
-        model.load_state_dict(best_state_dict)
-        best_f1_str = f"{best_val_macro_f1:.4f}" if np.isfinite(best_val_macro_f1) else "N/A"
-        print(f"\nLoaded best model from epoch {best_epoch + 1} based on validation macro F1 {best_f1_str}.")
-
-    val_loss_final, val_acc_final, val_true, val_pred = evaluate(model=model,
-                                                                 dataloader=val_loader,
-                                                                 criterion=criterion,
-                                                                 device=device,
-                                                                 collect_stats=True)
-    if val_true is not None and val_true.size > 0:
-        val_macro_f1_final = f1_score(val_true, val_pred, average="macro", zero_division=0)
-    else:
-        val_macro_f1_final = float("nan")
-    val_macro_f1_final_str = f"{val_macro_f1_final:.4f}" if np.isfinite(val_macro_f1_final) else "N/A"
-    print(f"\nFinal validation metrics: loss={val_loss_final:.4f} | acc={val_acc_final:.4f} | macro_f1={val_macro_f1_final_str}")
-    report_classification_metrics(val_true, val_pred, "Validation", ordered_labels, inv_label_map)
-
-    test_loss, test_acc, test_true, test_pred = evaluate(model=model,
-                                                         dataloader=test_loader,
-                                                         criterion=criterion,
-                                                         device=device,
-                                                         collect_stats=True)
-    if test_true is not None and test_true.size > 0:
-        test_macro_f1 = f1_score(test_true, test_pred, average="macro", zero_division=0)
-    else:
-        test_macro_f1 = float("nan")
-    test_macro_f1_str = f"{test_macro_f1:.4f}" if np.isfinite(test_macro_f1) else "N/A"
-    print(f"\nTest metrics: loss={test_loss:.4f} | acc={test_acc:.4f} | macro_f1={test_macro_f1_str}")
-    report_classification_metrics(test_true, test_pred, "Test", ordered_labels, inv_label_map)
-
-
-def main(args):
-    log_file_handle = None
-    tee = None
-    original_stdout = sys.stdout
-    original_stderr = sys.stderr
-    try:
-        log_input = (args.log_file or "").strip()
-        if log_input:
-            log_path = Path(log_input).expanduser()
-        else:
-            timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
-            model_name = getattr(args, "model", "model") or "model"
-            model_slug = "".join(
-                ch if ch.isalnum() or ch in ("-", "_") else "_" for ch in model_name
-            )
-            if not model_slug.strip("_"):
-                model_slug = "model"
-            log_path = Path("logs") / f"{timestamp}_{model_slug}.log"
-        log_path.parent.mkdir(parents=True, exist_ok=True)
-        log_file_handle = open(log_path, "w", encoding="utf-8")
-        tee = Tee(original_stdout, log_file_handle)
-        sys.stdout = tee
-        sys.stderr = tee
-        print(f"[Logging] Writing output to {log_path}")
-        run_pipeline(args)
-    finally:
-        if tee:
-            sys.stdout = original_stdout
-            sys.stderr = original_stderr
-        if log_file_handle:
-            log_file_handle.close()
+    test_loss, test_acc = evaluate(model=model,
+                                   dataloader=test_loader,
+                                   criterion=criterion,
+                                   device=device)
+    print(f"\nTest metrics: loss={test_loss:.4f} | acc={test_acc:.4f}")
 
 
 if __name__ == "__main__":
@@ -489,8 +403,7 @@ if __name__ == "__main__":
     train_group.add_argument('--epochs', type=int, default=10)
     train_group.add_argument('--lr', type=float, default=0.01)
     train_group.add_argument('--seed', type=int, default=0)
-    train_group.add_argument('--gpu', type=int, default=0, help='CUDA GPU index to use (0-based)')
-    train_group.add_argument('--log_file', type=str, default='', help='File path to save console output (defaults to logs/<timestamp>_<model>.log)')
+    train_group.add_argument('--device', type=int, default=0)
 
     model_group = parser.add_argument_group("Model (LSTM/Transformer shared)")
     model_group.add_argument('--model', type=str, default='lstm', choices=['lstm', 'sleep_transformer', 'deepsleepnet'])
