@@ -1,0 +1,749 @@
+[Logging] Writing output to logs/hparam_search/20251028-050901_run008_lstm_sl20_es20_lr0.001_bs32.log
+Using CUDA device 7: NVIDIA RTX A6000
+Train files: 60 | Validation files: 20 | Test files: 20
+Using feature columns: ['C4-M1', 'F4-M1', 'O2-M1', 'Fp1-O2', 'T3 - CZ', 'CZ - T4', 'E1', 'E2', 'ECG', 'PTAF', 'FLOW', 'ABDOMEN', 'SAO2', 'BVP', 'ACC_X', 'ACC_Y', 'ACC_Z', 'TEMP', 'EDA', 'HR', 'IBI']
+preprocess-dreamt:   0%|          | 0/60 [00:00<?, ?file/s]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S025_PSG_df_updated.csv ---
+preprocess-dreamt:   2%|1         | 1/60 [00:09<09:46,  9.94s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S010_PSG_df_updated.csv ---
+preprocess-dreamt:   3%|3         | 2/60 [00:19<09:26,  9.77s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S013_PSG_df_updated.csv ---
+preprocess-dreamt:   5%|5         | 3/60 [00:28<08:43,  9.19s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S009_PSG_df_updated.csv ---
+preprocess-dreamt:   7%|6         | 4/60 [00:36<08:22,  8.98s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S051_PSG_df_updated.csv ---
+preprocess-dreamt:   8%|8         | 5/60 [00:44<07:55,  8.65s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S015_PSG_df_updated.csv ---
+preprocess-dreamt:  10%|#         | 6/60 [00:57<08:58,  9.98s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S003_PSG_df_updated.csv ---
+preprocess-dreamt:  12%|#1        | 7/60 [01:06<08:32,  9.67s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S095_PSG_df_updated.csv ---
+preprocess-dreamt:  13%|#3        | 8/60 [01:15<08:13,  9.49s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S098_PSG_df_updated.csv ---
+preprocess-dreamt:  15%|#5        | 9/60 [01:24<07:55,  9.32s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S057_PSG_df_updated.csv ---
+preprocess-dreamt:  17%|#6        | 10/60 [01:33<07:37,  9.16s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S018_PSG_df_updated.csv ---
+preprocess-dreamt:  18%|#8        | 11/60 [01:44<07:58,  9.77s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S067_PSG_df_updated.csv ---
+preprocess-dreamt:  20%|##        | 12/60 [01:53<07:39,  9.57s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S055_PSG_df_updated.csv ---
+preprocess-dreamt:  22%|##1       | 13/60 [02:01<07:14,  9.23s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S044_PSG_df_updated.csv ---
+preprocess-dreamt:  23%|##3       | 14/60 [02:10<06:49,  8.91s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S084_PSG_df_updated.csv ---
+preprocess-dreamt:  25%|##5       | 15/60 [02:19<06:40,  8.90s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S004_PSG_df_updated.csv ---
+preprocess-dreamt:  27%|##6       | 16/60 [02:27<06:30,  8.89s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S050_PSG_df_updated.csv ---
+preprocess-dreamt:  28%|##8       | 17/60 [02:36<06:12,  8.67s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S091_PSG_df_updated.csv ---
+preprocess-dreamt:  30%|###       | 18/60 [02:45<06:12,  8.86s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S082_PSG_df_updated.csv ---
+preprocess-dreamt:  32%|###1      | 19/60 [02:54<06:03,  8.86s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S070_PSG_df_updated.csv ---
+preprocess-dreamt:  33%|###3      | 20/60 [03:03<05:53,  8.85s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S021_PSG_df_updated.csv ---
+Skipping file due to preprocessing error: could not convert string to float: '2.6855878538185697e-069043259327077127e-06'
+preprocess-dreamt:  35%|###5      | 21/60 [04:39<22:52, 35.19s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S008_PSG_df_updated.csv ---
+preprocess-dreamt:  37%|###6      | 22/60 [04:48<17:21, 27.41s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S026_PSG_df_updated.csv ---
+preprocess-dreamt:  38%|###8      | 23/60 [04:59<13:50, 22.45s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S012_PSG_df_updated.csv ---
+preprocess-dreamt:  40%|####      | 24/60 [05:10<11:17, 18.82s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S063_PSG_df_updated.csv ---
+preprocess-dreamt:  42%|####1     | 25/60 [05:18<09:10, 15.72s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S032_PSG_df_updated.csv ---
+preprocess-dreamt:  43%|####3     | 26/60 [05:28<07:53, 13.92s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S024_PSG_df_updated.csv ---
+preprocess-dreamt:  45%|####5     | 27/60 [05:38<07:04, 12.86s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S031_PSG_df_updated.csv ---
+preprocess-dreamt:  47%|####6     | 28/60 [05:47<06:15, 11.73s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S087_PSG_df_updated.csv ---
+preprocess-dreamt:  48%|####8     | 29/60 [05:57<05:41, 11.02s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S039_PSG_df_updated.csv ---
+preprocess-dreamt:  50%|#####     | 30/60 [06:07<05:20, 10.67s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S097_PSG_df_updated.csv ---
+preprocess-dreamt:  52%|#####1    | 31/60 [06:14<04:43,  9.78s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S085_PSG_df_updated.csv ---
+preprocess-dreamt:  53%|#####3    | 32/60 [06:23<04:27,  9.55s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S046_PSG_df_updated.csv ---
+preprocess-dreamt:  55%|#####5    | 33/60 [06:33<04:17,  9.52s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S103_PSG_df_updated.csv ---
+preprocess-dreamt:  57%|#####6    | 34/60 [06:41<03:57,  9.15s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S090_PSG_df_updated.csv ---
+preprocess-dreamt:  58%|#####8    | 35/60 [06:50<03:50,  9.22s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S030_PSG_df_updated.csv ---
+preprocess-dreamt:  60%|######    | 36/60 [07:01<03:50,  9.59s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S036_PSG_df_updated.csv ---
+preprocess-dreamt:  62%|######1   | 37/60 [07:13<03:58, 10.35s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S092_PSG_df_updated.csv ---
+preprocess-dreamt:  63%|######3   | 38/60 [07:23<03:44, 10.18s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S047_PSG_df_updated.csv ---
+preprocess-dreamt:  65%|######5   | 39/60 [07:32<03:28,  9.92s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S016_PSG_df_updated.csv ---
+preprocess-dreamt:  67%|######6   | 40/60 [07:44<03:29, 10.50s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S088_PSG_df_updated.csv ---
+preprocess-dreamt:  68%|######8   | 41/60 [07:54<03:16, 10.36s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S074_PSG_df_updated.csv ---
+preprocess-dreamt:  70%|#######   | 42/60 [08:04<03:04, 10.26s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S006_PSG_df_updated.csv ---
+preprocess-dreamt:  72%|#######1  | 43/60 [08:14<02:51, 10.11s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S022_PSG_df_updated.csv ---
+preprocess-dreamt:  73%|#######3  | 44/60 [08:24<02:43, 10.24s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S017_PSG_df_updated.csv ---
+preprocess-dreamt:  75%|#######5  | 45/60 [08:38<02:50, 11.35s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S023_PSG_df_updated.csv ---
+preprocess-dreamt:  77%|#######6  | 46/60 [08:49<02:36, 11.16s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S033_PSG_df_updated.csv ---
+preprocess-dreamt:  78%|#######8  | 47/60 [08:59<02:22, 10.97s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S080_PSG_df_updated.csv ---
+preprocess-dreamt:  80%|########  | 48/60 [09:10<02:08, 10.75s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S061_PSG_df_updated.csv ---
+preprocess-dreamt:  82%|########1 | 49/60 [09:20<01:57, 10.70s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S071_PSG_df_updated.csv ---
+preprocess-dreamt:  83%|########3 | 50/60 [09:30<01:45, 10.57s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S077_PSG_df_updated.csv ---
+preprocess-dreamt:  85%|########5 | 51/60 [09:39<01:28,  9.88s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S053_PSG_df_updated.csv ---
+preprocess-dreamt:  87%|########6 | 52/60 [09:49<01:20, 10.04s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S073_PSG_df_updated.csv ---
+preprocess-dreamt:  88%|########8 | 53/60 [10:00<01:11, 10.16s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S027_PSG_df_updated.csv ---
+preprocess-dreamt:  90%|######### | 54/60 [10:10<01:01, 10.31s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S102_PSG_df_updated.csv ---
+preprocess-dreamt:  92%|#########1| 55/60 [10:19<00:49,  9.81s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S049_PSG_df_updated.csv ---
+preprocess-dreamt:  93%|#########3| 56/60 [10:29<00:39,  9.85s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S100_PSG_df_updated.csv ---
+preprocess-dreamt:  95%|#########5| 57/60 [10:39<00:29,  9.81s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S002_PSG_df_updated.csv ---
+preprocess-dreamt:  97%|#########6| 58/60 [10:48<00:19,  9.65s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S076_PSG_df_updated.csv ---
+preprocess-dreamt:  98%|#########8| 59/60 [10:57<00:09,  9.56s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S037_PSG_df_updated.csv ---
+preprocess-dreamt: 100%|##########| 60/60 [11:08<00:00,  9.84s/file]preprocess-dreamt: 100%|##########| 60/60 [11:08<00:00, 11.14s/file]
+preprocess-dreamt:   0%|          | 0/20 [00:00<?, ?file/s]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S062_PSG_df_updated.csv ---
+preprocess-dreamt:   5%|5         | 1/20 [00:07<02:28,  7.83s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S096_PSG_df_updated.csv ---
+preprocess-dreamt:  10%|#         | 2/20 [00:17<02:37,  8.76s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S005_PSG_df_updated.csv ---
+preprocess-dreamt:  15%|#5        | 3/20 [00:26<02:32,  8.96s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S099_PSG_df_updated.csv ---
+preprocess-dreamt:  20%|##        | 4/20 [00:35<02:25,  9.09s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S059_PSG_df_updated.csv ---
+preprocess-dreamt:  25%|##5       | 5/20 [00:45<02:18,  9.21s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S094_PSG_df_updated.csv ---
+preprocess-dreamt:  30%|###       | 6/20 [00:55<02:12,  9.48s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S028_PSG_df_updated.csv ---
+preprocess-dreamt:  35%|###5      | 7/20 [01:06<02:10, 10.02s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S043_PSG_df_updated.csv ---
+preprocess-dreamt:  40%|####      | 8/20 [01:16<02:02, 10.21s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S058_PSG_df_updated.csv ---
+preprocess-dreamt:  45%|####5     | 9/20 [01:28<01:57, 10.70s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S093_PSG_df_updated.csv ---
+preprocess-dreamt:  50%|#####     | 10/20 [01:41<01:53, 11.40s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S079_PSG_df_updated.csv ---
+preprocess-dreamt:  55%|#####5    | 11/20 [01:52<01:42, 11.34s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S075_PSG_df_updated.csv ---
+preprocess-dreamt:  60%|######    | 12/20 [02:03<01:30, 11.27s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S064_PSG_df_updated.csv ---
+preprocess-dreamt:  65%|######5   | 13/20 [02:15<01:20, 11.48s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S045_PSG_df_updated.csv ---
+preprocess-dreamt:  70%|#######   | 14/20 [02:26<01:07, 11.23s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S011_PSG_df_updated.csv ---
+preprocess-dreamt:  75%|#######5  | 15/20 [02:37<00:55, 11.18s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S086_PSG_df_updated.csv ---
+preprocess-dreamt:  80%|########  | 16/20 [02:48<00:44, 11.12s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S042_PSG_df_updated.csv ---
+preprocess-dreamt:  85%|########5 | 17/20 [02:57<00:31, 10.39s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S020_PSG_df_updated.csv ---
+Skipping file due to preprocessing error: could not convert string to float: '-6.4942397192330.0003244678416113'
+preprocess-dreamt:  90%|######### | 18/20 [03:07<00:20, 10.20s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S081_PSG_df_updated.csv ---
+preprocess-dreamt:  95%|#########5| 19/20 [03:17<00:10, 10.13s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S072_PSG_df_updated.csv ---
+preprocess-dreamt: 100%|##########| 20/20 [03:27<00:00, 10.38s/file]preprocess-dreamt: 100%|##########| 20/20 [03:27<00:00, 10.40s/file]
+preprocess-dreamt:   0%|          | 0/20 [00:00<?, ?file/s]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S034_PSG_df_updated.csv ---
+preprocess-dreamt:   5%|5         | 1/20 [00:09<03:00,  9.50s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S083_PSG_df_updated.csv ---
+preprocess-dreamt:  10%|#         | 2/20 [00:17<02:36,  8.71s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S014_PSG_df_updated.csv ---
+preprocess-dreamt:  15%|#5        | 3/20 [00:27<02:37,  9.26s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S089_PSG_df_updated.csv ---
+preprocess-dreamt:  20%|##        | 4/20 [00:37<02:32,  9.56s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S038_PSG_df_updated.csv ---
+preprocess-dreamt:  25%|##5       | 5/20 [00:48<02:32, 10.14s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S019_PSG_df_updated.csv ---
+Skipping file due to preprocessing error: could not convert string to float: '--33.0'
+preprocess-dreamt:  30%|###       | 6/20 [02:18<08:41, 37.22s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S068_PSG_df_updated.csv ---
+preprocess-dreamt:  35%|###5      | 7/20 [02:29<06:13, 28.69s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S029_PSG_df_updated.csv ---
+preprocess-dreamt:  40%|####      | 8/20 [02:40<04:34, 22.87s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S078_PSG_df_updated.csv ---
+preprocess-dreamt:  45%|####5     | 9/20 [02:49<03:25, 18.73s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S048_PSG_df_updated.csv ---
+preprocess-dreamt:  50%|#####     | 10/20 [02:59<02:38, 15.83s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S065_PSG_df_updated.csv ---
+preprocess-dreamt:  55%|#####5    | 11/20 [03:08<02:06, 14.03s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S040_PSG_df_updated.csv ---
+preprocess-dreamt:  60%|######    | 12/20 [03:19<01:43, 12.89s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S054_PSG_df_updated.csv ---
+preprocess-dreamt:  65%|######5   | 13/20 [03:29<01:23, 11.93s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S066_PSG_df_updated.csv ---
+preprocess-dreamt:  70%|#######   | 14/20 [03:38<01:06, 11.12s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S069_PSG_df_updated.csv ---
+preprocess-dreamt:  75%|#######5  | 15/20 [03:48<00:54, 10.81s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S035_PSG_df_updated.csv ---
+preprocess-dreamt:  80%|########  | 16/20 [03:57<00:41, 10.41s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S007_PSG_df_updated.csv ---
+preprocess-dreamt:  85%|########5 | 17/20 [04:07<00:30, 10.21s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S056_PSG_df_updated.csv ---
+preprocess-dreamt:  90%|######### | 18/20 [04:17<00:20, 10.18s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S101_PSG_df_updated.csv ---
+preprocess-dreamt:  95%|#########5| 19/20 [04:27<00:10, 10.16s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S052_PSG_df_updated.csv ---
+preprocess-dreamt: 100%|##########| 20/20 [04:39<00:00, 10.76s/file]preprocess-dreamt: 100%|##########| 20/20 [04:39<00:00, 14.00s/file]
+Using 21 channels with 2000 samples per epoch.
+ceragem:   0%|          | 0/10 [00:00<?, ?it/s]Epoch   1/10: train_loss=1.0455 | val_loss=1.4864 | train_acc=0.6072 | val_acc=0.4514 | val_macro_f1=0.2333
+ceragem:  10%|#         | 1/10 [01:29<13:29, 89.93s/it]Epoch   2/10: train_loss=0.8257 | val_loss=1.5496 | train_acc=0.6974 | val_acc=0.4680 | val_macro_f1=0.2402
+ceragem:  20%|##        | 2/10 [03:41<15:14, 114.31s/it]Epoch   3/10: train_loss=0.7334 | val_loss=1.6585 | train_acc=0.7358 | val_acc=0.4822 | val_macro_f1=0.2448
+ceragem:  30%|###       | 3/10 [05:36<13:22, 114.63s/it]Epoch   4/10: train_loss=0.6886 | val_loss=1.6673 | train_acc=0.7539 | val_acc=0.4694 | val_macro_f1=0.2429
+ceragem:  40%|####      | 4/10 [07:11<10:41, 106.89s/it]Epoch   5/10: train_loss=0.6454 | val_loss=1.7959 | train_acc=0.7688 | val_acc=0.4648 | val_macro_f1=0.2624
+ceragem:  50%|#####     | 5/10 [08:42<08:26, 101.39s/it]Epoch   6/10: train_loss=0.6171 | val_loss=1.8130 | train_acc=0.7776 | val_acc=0.4700 | val_macro_f1=0.2423
+ceragem:  60%|######    | 6/10 [10:13<06:30, 97.59s/it] Epoch   7/10: train_loss=0.5956 | val_loss=1.7682 | train_acc=0.7866 | val_acc=0.4823 | val_macro_f1=0.2543
+ceragem:  70%|#######   | 7/10 [11:44<04:46, 95.50s/it]Epoch   8/10: train_loss=0.5750 | val_loss=1.8582 | train_acc=0.7941 | val_acc=0.4553 | val_macro_f1=0.2499
+ceragem:  80%|########  | 8/10 [13:18<03:10, 95.02s/it]Epoch   9/10: train_loss=0.5592 | val_loss=1.9175 | train_acc=0.7967 | val_acc=0.4557 | val_macro_f1=0.2503
+ceragem:  90%|######### | 9/10 [14:49<01:33, 93.95s/it]Epoch  10/10: train_loss=0.5431 | val_loss=1.9472 | train_acc=0.8037 | val_acc=0.4537 | val_macro_f1=0.2463
+ceragem: 100%|##########| 10/10 [16:18<00:00, 92.37s/it]ceragem: 100%|##########| 10/10 [16:18<00:00, 97.88s/it]
+
+Summary (loss: train/val, acc: train/val):
+  - Epoch   1: loss 1.0455/1.4864 | acc 0.6072/0.4514 | val_macro_f1 0.2333
+  - Epoch   2: loss 0.8257/1.5496 | acc 0.6974/0.4680 | val_macro_f1 0.2402
+  - Epoch   3: loss 0.7334/1.6585 | acc 0.7358/0.4822 | val_macro_f1 0.2448
+  - Epoch   4: loss 0.6886/1.6673 | acc 0.7539/0.4694 | val_macro_f1 0.2429
+  - Epoch   5: loss 0.6454/1.7959 | acc 0.7688/0.4648 | val_macro_f1 0.2624
+  - Epoch   6: loss 0.6171/1.8130 | acc 0.7776/0.4700 | val_macro_f1 0.2423
+  - Epoch   7: loss 0.5956/1.7682 | acc 0.7866/0.4823 | val_macro_f1 0.2543
+  - Epoch   8: loss 0.5750/1.8582 | acc 0.7941/0.4553 | val_macro_f1 0.2499
+  - Epoch   9: loss 0.5592/1.9175 | acc 0.7967/0.4557 | val_macro_f1 0.2503
+  - Epoch  10: loss 0.5431/1.9472 | acc 0.8037/0.4537 | val_macro_f1 0.2463
+
+Elapsed training time: 978.80 seconds
+
+Loaded best model from epoch 5 based on validation macro F1 0.2624.
+
+Final validation metrics: loss=1.7959 | acc=0.4648 | macro_f1=0.2624
+
+Validation metrics:
+  Accuracy           : 0.4648
+  Balanced Accuracy  : 0.2661
+  Macro F1           : 0.2624
+  Weighted F1        : 0.4315
+  Cohen's Kappa      : 0.1185
+  Matthews Corrcoef  : 0.1226
+
+  Per-class metrics (precision | recall | f1 | support):
+      W (0): 0.4452 | 0.3528 | 0.3937 | 5167
+     N1 (1): 0.1004 | 0.0298 | 0.0459 | 2756
+     N2 (2): 0.5448 | 0.7049 | 0.6146 | 10735
+     N3 (3): 0.1085 | 0.0709 | 0.0858 | 395
+      R (4): 0.1725 | 0.1720 | 0.1722 | 2198
+
+  Confusion matrix (rows=true, cols=pred):
+[[1823  222 2747   11  364]
+ [ 533   82 1934   14  193]
+ [1416  412 7567  205 1135]
+ [  28    0  218   28  121]
+ [ 295  101 1424    0  378]]
+
+  Classification report:
+              precision    recall  f1-score   support
+
+           W       0.45      0.35      0.39      5167
+          N1       0.10      0.03      0.05      2756
+          N2       0.54      0.70      0.61     10735
+          N3       0.11      0.07      0.09       395
+           R       0.17      0.17      0.17      2198
+
+    accuracy                           0.46     21251
+   macro avg       0.27      0.27      0.26     21251
+weighted avg       0.42      0.46      0.43     21251
+
+
+Test metrics: loss=1.8257 | acc=0.4669 | macro_f1=0.2629
+
+Test metrics:
+  Accuracy           : 0.4669
+  Balanced Accuracy  : 0.2613
+  Macro F1           : 0.2629
+  Weighted F1        : 0.4294
+  Cohen's Kappa      : 0.1115
+  Matthews Corrcoef  : 0.1160
+
+  Per-class metrics (precision | recall | f1 | support):
+      W (0): 0.4239 | 0.3385 | 0.3764 | 5138
+     N1 (1): 0.1025 | 0.0269 | 0.0427 | 2414
+     N2 (2): 0.5501 | 0.7238 | 0.6251 | 11509
+     N3 (3): 0.2761 | 0.1014 | 0.1483 | 888
+      R (4): 0.1290 | 0.1162 | 0.1222 | 2591
+
+  Confusion matrix (rows=true, cols=pred):
+[[1739  243 2679   24  453]
+ [ 387   65 1674   19  269]
+ [1565  223 8330  158 1233]
+ [  95   24  601   90   78]
+ [ 316   79 1860   35  301]]
+
+  Classification report:
+              precision    recall  f1-score   support
+
+           W       0.42      0.34      0.38      5138
+          N1       0.10      0.03      0.04      2414
+          N2       0.55      0.72      0.63     11509
+          N3       0.28      0.10      0.15       888
+           R       0.13      0.12      0.12      2591
+
+    accuracy                           0.47     22540
+   macro avg       0.30      0.26      0.26     22540
+weighted avg       0.41      0.47      0.43     22540
+
+
+
+# --- Captured stdout ---
+[Logging] Writing output to logs/hparam_search/20251028-050901_run008_lstm_sl20_es20_lr0.001_bs32.log
+Using CUDA device 7: NVIDIA RTX A6000
+Train files: 60 | Validation files: 20 | Test files: 20
+Using feature columns: ['C4-M1', 'F4-M1', 'O2-M1', 'Fp1-O2', 'T3 - CZ', 'CZ - T4', 'E1', 'E2', 'ECG', 'PTAF', 'FLOW', 'ABDOMEN', 'SAO2', 'BVP', 'ACC_X', 'ACC_Y', 'ACC_Z', 'TEMP', 'EDA', 'HR', 'IBI']
+
+preprocess-dreamt:   0%|          | 0/60 [00:00<?, ?file/s]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S025_PSG_df_updated.csv ---
+
+preprocess-dreamt:   2%|1         | 1/60 [00:09<09:46,  9.94s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S010_PSG_df_updated.csv ---
+
+preprocess-dreamt:   3%|3         | 2/60 [00:19<09:26,  9.77s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S013_PSG_df_updated.csv ---
+
+preprocess-dreamt:   5%|5         | 3/60 [00:28<08:43,  9.19s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S009_PSG_df_updated.csv ---
+
+preprocess-dreamt:   7%|6         | 4/60 [00:36<08:22,  8.98s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S051_PSG_df_updated.csv ---
+
+preprocess-dreamt:   8%|8         | 5/60 [00:44<07:55,  8.65s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S015_PSG_df_updated.csv ---
+
+preprocess-dreamt:  10%|#         | 6/60 [00:57<08:58,  9.98s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S003_PSG_df_updated.csv ---
+
+preprocess-dreamt:  12%|#1        | 7/60 [01:06<08:32,  9.67s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S095_PSG_df_updated.csv ---
+
+preprocess-dreamt:  13%|#3        | 8/60 [01:15<08:13,  9.49s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S098_PSG_df_updated.csv ---
+
+preprocess-dreamt:  15%|#5        | 9/60 [01:24<07:55,  9.32s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S057_PSG_df_updated.csv ---
+
+preprocess-dreamt:  17%|#6        | 10/60 [01:33<07:37,  9.16s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S018_PSG_df_updated.csv ---
+
+preprocess-dreamt:  18%|#8        | 11/60 [01:44<07:58,  9.77s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S067_PSG_df_updated.csv ---
+
+preprocess-dreamt:  20%|##        | 12/60 [01:53<07:39,  9.57s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S055_PSG_df_updated.csv ---
+
+preprocess-dreamt:  22%|##1       | 13/60 [02:01<07:14,  9.23s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S044_PSG_df_updated.csv ---
+
+preprocess-dreamt:  23%|##3       | 14/60 [02:10<06:49,  8.91s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S084_PSG_df_updated.csv ---
+
+preprocess-dreamt:  25%|##5       | 15/60 [02:19<06:40,  8.90s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S004_PSG_df_updated.csv ---
+
+preprocess-dreamt:  27%|##6       | 16/60 [02:27<06:30,  8.89s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S050_PSG_df_updated.csv ---
+
+preprocess-dreamt:  28%|##8       | 17/60 [02:36<06:12,  8.67s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S091_PSG_df_updated.csv ---
+
+preprocess-dreamt:  30%|###       | 18/60 [02:45<06:12,  8.86s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S082_PSG_df_updated.csv ---
+
+preprocess-dreamt:  32%|###1      | 19/60 [02:54<06:03,  8.86s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S070_PSG_df_updated.csv ---
+
+preprocess-dreamt:  33%|###3      | 20/60 [03:03<05:53,  8.85s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S021_PSG_df_updated.csv ---
+Skipping file due to preprocessing error: could not convert string to float: '2.6855878538185697e-069043259327077127e-06'
+
+preprocess-dreamt:  35%|###5      | 21/60 [04:39<22:52, 35.19s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S008_PSG_df_updated.csv ---
+
+preprocess-dreamt:  37%|###6      | 22/60 [04:48<17:21, 27.41s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S026_PSG_df_updated.csv ---
+
+preprocess-dreamt:  38%|###8      | 23/60 [04:59<13:50, 22.45s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S012_PSG_df_updated.csv ---
+
+preprocess-dreamt:  40%|####      | 24/60 [05:10<11:17, 18.82s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S063_PSG_df_updated.csv ---
+
+preprocess-dreamt:  42%|####1     | 25/60 [05:18<09:10, 15.72s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S032_PSG_df_updated.csv ---
+
+preprocess-dreamt:  43%|####3     | 26/60 [05:28<07:53, 13.92s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S024_PSG_df_updated.csv ---
+
+preprocess-dreamt:  45%|####5     | 27/60 [05:38<07:04, 12.86s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S031_PSG_df_updated.csv ---
+
+preprocess-dreamt:  47%|####6     | 28/60 [05:47<06:15, 11.73s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S087_PSG_df_updated.csv ---
+
+preprocess-dreamt:  48%|####8     | 29/60 [05:57<05:41, 11.02s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S039_PSG_df_updated.csv ---
+
+preprocess-dreamt:  50%|#####     | 30/60 [06:07<05:20, 10.67s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S097_PSG_df_updated.csv ---
+
+preprocess-dreamt:  52%|#####1    | 31/60 [06:14<04:43,  9.78s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S085_PSG_df_updated.csv ---
+
+preprocess-dreamt:  53%|#####3    | 32/60 [06:23<04:27,  9.55s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S046_PSG_df_updated.csv ---
+
+preprocess-dreamt:  55%|#####5    | 33/60 [06:33<04:17,  9.52s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S103_PSG_df_updated.csv ---
+
+preprocess-dreamt:  57%|#####6    | 34/60 [06:41<03:57,  9.15s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S090_PSG_df_updated.csv ---
+
+preprocess-dreamt:  58%|#####8    | 35/60 [06:50<03:50,  9.22s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S030_PSG_df_updated.csv ---
+
+preprocess-dreamt:  60%|######    | 36/60 [07:01<03:50,  9.59s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S036_PSG_df_updated.csv ---
+
+preprocess-dreamt:  62%|######1   | 37/60 [07:13<03:58, 10.35s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S092_PSG_df_updated.csv ---
+
+preprocess-dreamt:  63%|######3   | 38/60 [07:23<03:44, 10.18s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S047_PSG_df_updated.csv ---
+
+preprocess-dreamt:  65%|######5   | 39/60 [07:32<03:28,  9.92s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S016_PSG_df_updated.csv ---
+
+preprocess-dreamt:  67%|######6   | 40/60 [07:44<03:29, 10.50s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S088_PSG_df_updated.csv ---
+
+preprocess-dreamt:  68%|######8   | 41/60 [07:54<03:16, 10.36s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S074_PSG_df_updated.csv ---
+
+preprocess-dreamt:  70%|#######   | 42/60 [08:04<03:04, 10.26s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S006_PSG_df_updated.csv ---
+
+preprocess-dreamt:  72%|#######1  | 43/60 [08:14<02:51, 10.11s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S022_PSG_df_updated.csv ---
+
+preprocess-dreamt:  73%|#######3  | 44/60 [08:24<02:43, 10.24s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S017_PSG_df_updated.csv ---
+
+preprocess-dreamt:  75%|#######5  | 45/60 [08:38<02:50, 11.35s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S023_PSG_df_updated.csv ---
+
+preprocess-dreamt:  77%|#######6  | 46/60 [08:49<02:36, 11.16s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S033_PSG_df_updated.csv ---
+
+preprocess-dreamt:  78%|#######8  | 47/60 [08:59<02:22, 10.97s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S080_PSG_df_updated.csv ---
+
+preprocess-dreamt:  80%|########  | 48/60 [09:10<02:08, 10.75s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S061_PSG_df_updated.csv ---
+
+preprocess-dreamt:  82%|########1 | 49/60 [09:20<01:57, 10.70s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S071_PSG_df_updated.csv ---
+
+preprocess-dreamt:  83%|########3 | 50/60 [09:30<01:45, 10.57s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S077_PSG_df_updated.csv ---
+
+preprocess-dreamt:  85%|########5 | 51/60 [09:39<01:28,  9.88s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S053_PSG_df_updated.csv ---
+
+preprocess-dreamt:  87%|########6 | 52/60 [09:49<01:20, 10.04s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S073_PSG_df_updated.csv ---
+
+preprocess-dreamt:  88%|########8 | 53/60 [10:00<01:11, 10.16s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S027_PSG_df_updated.csv ---
+
+preprocess-dreamt:  90%|######### | 54/60 [10:10<01:01, 10.31s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S102_PSG_df_updated.csv ---
+
+preprocess-dreamt:  92%|#########1| 55/60 [10:19<00:49,  9.81s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S049_PSG_df_updated.csv ---
+
+preprocess-dreamt:  93%|#########3| 56/60 [10:29<00:39,  9.85s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S100_PSG_df_updated.csv ---
+
+preprocess-dreamt:  95%|#########5| 57/60 [10:39<00:29,  9.81s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S002_PSG_df_updated.csv ---
+
+preprocess-dreamt:  97%|#########6| 58/60 [10:48<00:19,  9.65s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S076_PSG_df_updated.csv ---
+
+preprocess-dreamt:  98%|#########8| 59/60 [10:57<00:09,  9.56s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S037_PSG_df_updated.csv ---
+
+preprocess-dreamt: 100%|##########| 60/60 [11:08<00:00,  9.84s/file]
+preprocess-dreamt: 100%|##########| 60/60 [11:08<00:00, 11.14s/file]
+
+preprocess-dreamt:   0%|          | 0/20 [00:00<?, ?file/s]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S062_PSG_df_updated.csv ---
+
+preprocess-dreamt:   5%|5         | 1/20 [00:07<02:28,  7.83s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S096_PSG_df_updated.csv ---
+
+preprocess-dreamt:  10%|#         | 2/20 [00:17<02:37,  8.76s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S005_PSG_df_updated.csv ---
+
+preprocess-dreamt:  15%|#5        | 3/20 [00:26<02:32,  8.96s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S099_PSG_df_updated.csv ---
+
+preprocess-dreamt:  20%|##        | 4/20 [00:35<02:25,  9.09s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S059_PSG_df_updated.csv ---
+
+preprocess-dreamt:  25%|##5       | 5/20 [00:45<02:18,  9.21s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S094_PSG_df_updated.csv ---
+
+preprocess-dreamt:  30%|###       | 6/20 [00:55<02:12,  9.48s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S028_PSG_df_updated.csv ---
+
+preprocess-dreamt:  35%|###5      | 7/20 [01:06<02:10, 10.02s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S043_PSG_df_updated.csv ---
+
+preprocess-dreamt:  40%|####      | 8/20 [01:16<02:02, 10.21s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S058_PSG_df_updated.csv ---
+
+preprocess-dreamt:  45%|####5     | 9/20 [01:28<01:57, 10.70s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S093_PSG_df_updated.csv ---
+
+preprocess-dreamt:  50%|#####     | 10/20 [01:41<01:53, 11.40s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S079_PSG_df_updated.csv ---
+
+preprocess-dreamt:  55%|#####5    | 11/20 [01:52<01:42, 11.34s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S075_PSG_df_updated.csv ---
+
+preprocess-dreamt:  60%|######    | 12/20 [02:03<01:30, 11.27s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S064_PSG_df_updated.csv ---
+
+preprocess-dreamt:  65%|######5   | 13/20 [02:15<01:20, 11.48s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S045_PSG_df_updated.csv ---
+
+preprocess-dreamt:  70%|#######   | 14/20 [02:26<01:07, 11.23s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S011_PSG_df_updated.csv ---
+
+preprocess-dreamt:  75%|#######5  | 15/20 [02:37<00:55, 11.18s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S086_PSG_df_updated.csv ---
+
+preprocess-dreamt:  80%|########  | 16/20 [02:48<00:44, 11.12s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S042_PSG_df_updated.csv ---
+
+preprocess-dreamt:  85%|########5 | 17/20 [02:57<00:31, 10.39s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S020_PSG_df_updated.csv ---
+Skipping file due to preprocessing error: could not convert string to float: '-6.4942397192330.0003244678416113'
+
+preprocess-dreamt:  90%|######### | 18/20 [03:07<00:20, 10.20s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S081_PSG_df_updated.csv ---
+
+preprocess-dreamt:  95%|#########5| 19/20 [03:17<00:10, 10.13s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S072_PSG_df_updated.csv ---
+
+preprocess-dreamt: 100%|##########| 20/20 [03:27<00:00, 10.38s/file]
+preprocess-dreamt: 100%|##########| 20/20 [03:27<00:00, 10.40s/file]
+
+preprocess-dreamt:   0%|          | 0/20 [00:00<?, ?file/s]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S034_PSG_df_updated.csv ---
+
+preprocess-dreamt:   5%|5         | 1/20 [00:09<03:00,  9.50s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S083_PSG_df_updated.csv ---
+
+preprocess-dreamt:  10%|#         | 2/20 [00:17<02:36,  8.71s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S014_PSG_df_updated.csv ---
+
+preprocess-dreamt:  15%|#5        | 3/20 [00:27<02:37,  9.26s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S089_PSG_df_updated.csv ---
+
+preprocess-dreamt:  20%|##        | 4/20 [00:37<02:32,  9.56s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S038_PSG_df_updated.csv ---
+
+preprocess-dreamt:  25%|##5       | 5/20 [00:48<02:32, 10.14s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S019_PSG_df_updated.csv ---
+Skipping file due to preprocessing error: could not convert string to float: '--33.0'
+
+preprocess-dreamt:  30%|###       | 6/20 [02:18<08:41, 37.22s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S068_PSG_df_updated.csv ---
+
+preprocess-dreamt:  35%|###5      | 7/20 [02:29<06:13, 28.69s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S029_PSG_df_updated.csv ---
+
+preprocess-dreamt:  40%|####      | 8/20 [02:40<04:34, 22.87s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S078_PSG_df_updated.csv ---
+
+preprocess-dreamt:  45%|####5     | 9/20 [02:49<03:25, 18.73s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S048_PSG_df_updated.csv ---
+
+preprocess-dreamt:  50%|#####     | 10/20 [02:59<02:38, 15.83s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S065_PSG_df_updated.csv ---
+
+preprocess-dreamt:  55%|#####5    | 11/20 [03:08<02:06, 14.03s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S040_PSG_df_updated.csv ---
+
+preprocess-dreamt:  60%|######    | 12/20 [03:19<01:43, 12.89s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S054_PSG_df_updated.csv ---
+
+preprocess-dreamt:  65%|######5   | 13/20 [03:29<01:23, 11.93s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S066_PSG_df_updated.csv ---
+
+preprocess-dreamt:  70%|#######   | 14/20 [03:38<01:06, 11.12s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S069_PSG_df_updated.csv ---
+
+preprocess-dreamt:  75%|#######5  | 15/20 [03:48<00:54, 10.81s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S035_PSG_df_updated.csv ---
+
+preprocess-dreamt:  80%|########  | 16/20 [03:57<00:41, 10.41s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S007_PSG_df_updated.csv ---
+
+preprocess-dreamt:  85%|########5 | 17/20 [04:07<00:30, 10.21s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S056_PSG_df_updated.csv ---
+
+preprocess-dreamt:  90%|######### | 18/20 [04:17<00:20, 10.18s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S101_PSG_df_updated.csv ---
+
+preprocess-dreamt:  95%|#########5| 19/20 [04:27<00:10, 10.16s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S052_PSG_df_updated.csv ---
+
+preprocess-dreamt: 100%|##########| 20/20 [04:39<00:00, 10.76s/file]
+preprocess-dreamt: 100%|##########| 20/20 [04:39<00:00, 14.00s/file]
+Using 21 channels with 2000 samples per epoch.
+
+ceragem:   0%|          | 0/10 [00:00<?, ?it/s]Epoch   1/10: train_loss=1.0455 | val_loss=1.4864 | train_acc=0.6072 | val_acc=0.4514 | val_macro_f1=0.2333
+
+ceragem:  10%|#         | 1/10 [01:29<13:29, 89.93s/it]Epoch   2/10: train_loss=0.8257 | val_loss=1.5496 | train_acc=0.6974 | val_acc=0.4680 | val_macro_f1=0.2402
+
+ceragem:  20%|##        | 2/10 [03:41<15:14, 114.31s/it]Epoch   3/10: train_loss=0.7334 | val_loss=1.6585 | train_acc=0.7358 | val_acc=0.4822 | val_macro_f1=0.2448
+
+ceragem:  30%|###       | 3/10 [05:36<13:22, 114.63s/it]Epoch   4/10: train_loss=0.6886 | val_loss=1.6673 | train_acc=0.7539 | val_acc=0.4694 | val_macro_f1=0.2429
+
+ceragem:  40%|####      | 4/10 [07:11<10:41, 106.89s/it]Epoch   5/10: train_loss=0.6454 | val_loss=1.7959 | train_acc=0.7688 | val_acc=0.4648 | val_macro_f1=0.2624
+
+ceragem:  50%|#####     | 5/10 [08:42<08:26, 101.39s/it]Epoch   6/10: train_loss=0.6171 | val_loss=1.8130 | train_acc=0.7776 | val_acc=0.4700 | val_macro_f1=0.2423
+
+ceragem:  60%|######    | 6/10 [10:13<06:30, 97.59s/it] Epoch   7/10: train_loss=0.5956 | val_loss=1.7682 | train_acc=0.7866 | val_acc=0.4823 | val_macro_f1=0.2543
+
+ceragem:  70%|#######   | 7/10 [11:44<04:46, 95.50s/it]Epoch   8/10: train_loss=0.5750 | val_loss=1.8582 | train_acc=0.7941 | val_acc=0.4553 | val_macro_f1=0.2499
+
+ceragem:  80%|########  | 8/10 [13:18<03:10, 95.02s/it]Epoch   9/10: train_loss=0.5592 | val_loss=1.9175 | train_acc=0.7967 | val_acc=0.4557 | val_macro_f1=0.2503
+
+ceragem:  90%|######### | 9/10 [14:49<01:33, 93.95s/it]Epoch  10/10: train_loss=0.5431 | val_loss=1.9472 | train_acc=0.8037 | val_acc=0.4537 | val_macro_f1=0.2463
+
+ceragem: 100%|##########| 10/10 [16:18<00:00, 92.37s/it]
+ceragem: 100%|##########| 10/10 [16:18<00:00, 97.88s/it]
+
+Summary (loss: train/val, acc: train/val):
+  - Epoch   1: loss 1.0455/1.4864 | acc 0.6072/0.4514 | val_macro_f1 0.2333
+  - Epoch   2: loss 0.8257/1.5496 | acc 0.6974/0.4680 | val_macro_f1 0.2402
+  - Epoch   3: loss 0.7334/1.6585 | acc 0.7358/0.4822 | val_macro_f1 0.2448
+  - Epoch   4: loss 0.6886/1.6673 | acc 0.7539/0.4694 | val_macro_f1 0.2429
+  - Epoch   5: loss 0.6454/1.7959 | acc 0.7688/0.4648 | val_macro_f1 0.2624
+  - Epoch   6: loss 0.6171/1.8130 | acc 0.7776/0.4700 | val_macro_f1 0.2423
+  - Epoch   7: loss 0.5956/1.7682 | acc 0.7866/0.4823 | val_macro_f1 0.2543
+  - Epoch   8: loss 0.5750/1.8582 | acc 0.7941/0.4553 | val_macro_f1 0.2499
+  - Epoch   9: loss 0.5592/1.9175 | acc 0.7967/0.4557 | val_macro_f1 0.2503
+  - Epoch  10: loss 0.5431/1.9472 | acc 0.8037/0.4537 | val_macro_f1 0.2463
+
+Elapsed training time: 978.80 seconds
+
+Loaded best model from epoch 5 based on validation macro F1 0.2624.
+
+Final validation metrics: loss=1.7959 | acc=0.4648 | macro_f1=0.2624
+
+Validation metrics:
+  Accuracy           : 0.4648
+  Balanced Accuracy  : 0.2661
+  Macro F1           : 0.2624
+  Weighted F1        : 0.4315
+  Cohen's Kappa      : 0.1185
+  Matthews Corrcoef  : 0.1226
+
+  Per-class metrics (precision | recall | f1 | support):
+      W (0): 0.4452 | 0.3528 | 0.3937 | 5167
+     N1 (1): 0.1004 | 0.0298 | 0.0459 | 2756
+     N2 (2): 0.5448 | 0.7049 | 0.6146 | 10735
+     N3 (3): 0.1085 | 0.0709 | 0.0858 | 395
+      R (4): 0.1725 | 0.1720 | 0.1722 | 2198
+
+  Confusion matrix (rows=true, cols=pred):
+[[1823  222 2747   11  364]
+ [ 533   82 1934   14  193]
+ [1416  412 7567  205 1135]
+ [  28    0  218   28  121]
+ [ 295  101 1424    0  378]]
+
+  Classification report:
+              precision    recall  f1-score   support
+
+           W       0.45      0.35      0.39      5167
+          N1       0.10      0.03      0.05      2756
+          N2       0.54      0.70      0.61     10735
+          N3       0.11      0.07      0.09       395
+           R       0.17      0.17      0.17      2198
+
+    accuracy                           0.46     21251
+   macro avg       0.27      0.27      0.26     21251
+weighted avg       0.42      0.46      0.43     21251
+
+
+Test metrics: loss=1.8257 | acc=0.4669 | macro_f1=0.2629
+
+Test metrics:
+  Accuracy           : 0.4669
+  Balanced Accuracy  : 0.2613
+  Macro F1           : 0.2629
+  Weighted F1        : 0.4294
+  Cohen's Kappa      : 0.1115
+  Matthews Corrcoef  : 0.1160
+
+  Per-class metrics (precision | recall | f1 | support):
+      W (0): 0.4239 | 0.3385 | 0.3764 | 5138
+     N1 (1): 0.1025 | 0.0269 | 0.0427 | 2414
+     N2 (2): 0.5501 | 0.7238 | 0.6251 | 11509
+     N3 (3): 0.2761 | 0.1014 | 0.1483 | 888
+      R (4): 0.1290 | 0.1162 | 0.1222 | 2591
+
+  Confusion matrix (rows=true, cols=pred):
+[[1739  243 2679   24  453]
+ [ 387   65 1674   19  269]
+ [1565  223 8330  158 1233]
+ [  95   24  601   90   78]
+ [ 316   79 1860   35  301]]
+
+  Classification report:
+              precision    recall  f1-score   support
+
+           W       0.42      0.34      0.38      5138
+          N1       0.10      0.03      0.04      2414
+          N2       0.55      0.72      0.63     11509
+          N3       0.28      0.10      0.15       888
+           R       0.13      0.12      0.12      2591
+
+    accuracy                           0.47     22540
+   macro avg       0.30      0.26      0.26     22540
+weighted avg       0.41      0.47      0.43     22540
+

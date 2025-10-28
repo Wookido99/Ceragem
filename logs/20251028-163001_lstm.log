@@ -1,0 +1,13 @@
+[Logging] Writing output to logs/20251028-163001_lstm.log
+Using CUDA device 0: NVIDIA RTX A6000
+Train files: 60 | Validation files: 20 | Test files: 20
+Using feature columns: ['C4-M1', 'F4-M1', 'O2-M1', 'Fp1-O2', 'T3 - CZ', 'CZ - T4', 'E1', 'E2', 'ECG', 'PTAF', 'FLOW', 'ABDOMEN', 'SAO2', 'BVP', 'ACC_X', 'ACC_Y', 'ACC_Z', 'TEMP', 'EDA', 'HR', 'IBI']
+preprocess-dreamt:   0%|          | 0/60 [00:00<?, ?file/s]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S025_PSG_df_updated.csv ---
+preprocess-dreamt:   2%|1         | 1/60 [00:09<09:22,  9.54s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S010_PSG_df_updated.csv ---
+preprocess-dreamt:   3%|3         | 2/60 [00:18<09:01,  9.34s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S013_PSG_df_updated.csv ---
+preprocess-dreamt:   5%|5         | 3/60 [00:26<08:17,  8.72s/file]
+--- Processing file: /data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz/S009_PSG_df_updated.csv ---
+preprocess-dreamt:   5%|5         | 3/60 [00:54<17:10, 18.08s/file]

@@ -105,6 +105,31 @@ def report_classification_metrics(
     )
 
 
+def summarize_normalized_features(dataset, feature_names):
+    """Report per-channel stats after z-score normalization."""
+    sequences = getattr(dataset, "sequences", None)
+    if sequences is None or sequences.size == 0:
+        print("Training dataset is empty; skipping normalized feature summary.")
+        return
+    axis = (0, 1, 3)
+    means = sequences.mean(axis=axis)
+    stds = sequences.std(axis=axis)
+    mins = sequences.min(axis=axis)
+    maxs = sequences.max(axis=axis)
+    print("\nNormalized feature distribution (mean | std | min | max):")
+    total_channels = means.shape[0]
+    if not feature_names or len(feature_names) != total_channels:
+        feature_names = [f"channel_{idx}" for idx in range(total_channels)]
+    for idx, name in enumerate(feature_names):
+        print(
+            f"  {name}: "
+            f"{means[idx]: .4f} | "
+            f"{stds[idx]: .4f} | "
+            f"{mins[idx]: .4f} | "
+            f"{maxs[idx]: .4f}"
+        )
+
+
 def fix_seed(seed):
     torch.manual_seed(seed)
     torch.backends.cudnn.benchmark = True
@@ -118,12 +143,14 @@ def train(model, dataloader, criterion, optimizer, device):
 
     model.train()
     for batch in dataloader:
+        
         if len(batch) == 3:
             inputs, lengths, labels = batch
         else:
             inputs, labels = batch
             lengths = None
-
+        print(inputs.shape)
+        exit()
         inputs = inputs.to(device)
         labels = labels.to(device)
         lengths = lengths.to(device) if lengths is not None else None
@@ -189,34 +216,17 @@ def evaluate(model, dataloader, criterion, device, collect_stats: bool = False):
 
 
 def run_pipeline(args):
+    # Set GPU device
     if not torch.cuda.is_available():
         raise RuntimeError("CUDA GPU is required but not available.")
-    if args.gpu < 0 or args.gpu >= torch.cuda.device_count():
-        raise ValueError(
-            f"Invalid GPU index {args.gpu}. Available GPUs: 0 to {torch.cuda.device_count() - 1}."
-        )
     torch.cuda.set_device(args.gpu)
     device = torch.device(f"cuda:{args.gpu}")
     print(f"Using CUDA device {args.gpu}: {torch.cuda.get_device_name(args.gpu)}")
     fix_seed(args.seed)
 
     dataset_name = args.data.lower()
-    if dataset_name == "capslpdb":
-        default_dir = "/data/ceragem/physionet.org/files/capslpdb/1.0.0"
-        data_dir = args.data_dir or default_dir
-        pattern = os.path.join(data_dir, "*.edf")
-        data_format = "capslpdb"
-        default_features = list(DEFAULT_FEATURES["capslpdb"])
-    elif dataset_name == "sleepbrl":
-        default_dir = "/data/ceragem/physionet.org/files/sleepbrl/1.0.0"
-        data_dir = args.data_dir or default_dir
-        pattern = os.path.join(data_dir, "*.edf")
-        data_format = "sleepbrl"
-        default_features = list(DEFAULT_FEATURES["sleepbrl"])
-    else:
-        default_dir = os.path.join(
-            "/data/ceragem/physionet.org/files", args.data, "2.1.0", "data_100Hz"
-        )
+    if dataset_name == "dreamt":
+        default_dir = "/data/ceragem/physionet.org/files/dreamt/2.1.0/data_100Hz"
         data_dir = args.data_dir or default_dir
         pattern = os.path.join(data_dir, "*.csv")
         data_format = "dreamt"
@@ -275,39 +285,29 @@ def run_pipeline(args):
     else:
         print("Using dataset default feature columns.")
 
-    train_loader = get_dataloader(train_files,
-                                  args.batch_size,
-                                  args.seq_len,
-                                  shuffle=True,
-                                  epoch_seconds=args.epoch_seconds,
-                                  sample_rate_hz=effective_sample_rate,
-                                  max_files=None,
-                                  feature_columns=feature_columns,
+    train_loader = get_dataloader(train_files, args.batch_size, args.seq_len, shuffle=True, 
+                                  epoch_seconds=args.epoch_seconds, sample_rate_hz=effective_sample_rate, 
+                                  max_files=None, feature_columns=feature_columns,
                                   data_format=data_format)
-    val_loader = get_dataloader(val_files,
-                                args.batch_size,
-                                args.seq_len,
-                                shuffle=False,
-                                epoch_seconds=args.epoch_seconds,
-                                sample_rate_hz=effective_sample_rate,
-                                max_files=None,
-                                feature_columns=feature_columns,
+    val_loader = get_dataloader(val_files, args.batch_size, args.seq_len, shuffle=False,
+                                epoch_seconds=args.epoch_seconds, sample_rate_hz=effective_sample_rate,
+                                max_files=None, feature_columns=feature_columns,
                                 data_format=data_format)
-    test_loader = get_dataloader(test_files,
-                                 args.batch_size,
-                                 args.seq_len,
-                                 shuffle=False,
-                                 epoch_seconds=args.epoch_seconds,
-                                 sample_rate_hz=effective_sample_rate,
-                                 max_files=None,
-                                 feature_columns=feature_columns,
+    test_loader = get_dataloader(test_files, args.batch_size, args.seq_len, shuffle=False,
+                                 epoch_seconds=args.epoch_seconds, sample_rate_hz=effective_sample_rate,
+                                 max_files=None, feature_columns=feature_columns,
                                  data_format=data_format)
 
     train_dataset = train_loader.dataset
-    inv_label_map = getattr(train_dataset, "inv_label_map", DEFAULT_INV_LABEL_MAP)
-    ordered_labels = getattr(train_dataset, "ordered_label_ids", None)
-    if not ordered_labels:
-        ordered_labels = sorted(inv_label_map.keys())
+    inv_label_map = DEFAULT_INV_LABEL_MAP # Default inverse label map
+    ordered_labels = sorted(inv_label_map.keys())
+    
+    if feature_columns:
+        feature_names = list(feature_columns)
+    else:
+        feature_names = getattr(train_dataset, "feature_columns", None)
+        
+    summarize_normalized_features(train_dataset, feature_names)
     num_channels = getattr(train_dataset, "num_channels", train_dataset.sequences.shape[2])
     samples_per_epoch = getattr(train_dataset, "samples_per_epoch", effective_sample_rate * args.epoch_seconds)
     num_classes = getattr(train_dataset, "num_classes", None)
@@ -445,7 +445,7 @@ def main(args):
             log_path = Path(log_input).expanduser()
         else:
             timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
-            model_name = getattr(args, "model", "model") or "model"
+            model_name = args.model
             model_slug = "".join(
                 ch if ch.isalnum() or ch in ("-", "_") else "_" for ch in model_name
             )
@@ -480,7 +480,6 @@ if __name__ == "__main__":
     data_group.add_argument('--sample_rate', type=int, default=100, help='Samples per second in the raw data')
     data_group.add_argument('--epoch_seconds', type=int, default=30, help='Epoch length in seconds for windowing')
     data_group.add_argument('--seq_len', type=int, default=10)
-    data_group.add_argument('--test_ratio', type=float, default=0.1, help='(Deprecated) Unused; splits are fixed to 60/20/20')
     data_group.add_argument('--max_files', type=int, default=None, help='Limit how many files to load per split (useful for quick experiments)')
 
 
